@@ -1,6 +1,7 @@
 import numpy as np
 
 
+# the logarithm of a bunch of real numbers given its individual logarithms
 def log_sum_from_individual_logs(logs):
 
 	descending_sort = np.sort(logs)[::-1]
