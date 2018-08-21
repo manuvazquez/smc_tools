@@ -1,16 +1,23 @@
+import abc
+
 import numpy as np
 
 
-class ResamplingAlgorithm:
+class ResamplingAlgorithm(metaclass=abc.ABCMeta):
 	
 	def __init__(self):
+		"""
+			Abstract class for a resampling algorithm
+		"""
 		
 		pass
-	
+
+	@abc.abstractmethod
 	def get_indexes(self, weights, n):
-		"""It returns the indexes of the particles that should be kept after resampling.
+		"""
+		Returns the indexes of the particles that should be kept after resampling.
 		
-		Notice that it doesn't perform any "real" resampling"...the real work must be performed somewhere else.
+		Notice that it doesn't perform any "real" resampling": the real work must be performed somewhere else.
 
 		Parameters
 		----------
@@ -21,9 +28,8 @@ class ResamplingAlgorithm:
 
 		Returns
 		-------
-		indices : array_like
+		out : array_like
 			The indices of the selected particles
-
 		"""
 		pass
 
@@ -31,8 +37,15 @@ class ResamplingAlgorithm:
 class MultinomialResamplingAlgorithm(ResamplingAlgorithm):
 	
 	def __init__(self, PRNG=np.random.RandomState()):
-		
-		super().__init__()
+		"""
+		Creates a "multinomial" resampling object.
+
+		Parameters
+		----------
+		PRNG : RandomState instance or None, optional (default=None)
+			If RandomState instance, PRNG is the random number generator;
+			If None, a new random number generator instance is built
+		"""
 		
 		self._PRNG = PRNG
 		
@@ -45,9 +58,23 @@ class MultinomialResamplingAlgorithm(ResamplingAlgorithm):
 		return self._PRNG.choice(range(weights.size), n, p=weights)
 
 
-class ResamplingCriterion:
-	
+class ResamplingCriterion(metaclass=abc.ABCMeta):
+
+	@abc.abstractmethod
 	def is_resampling_needed(self, weights):
+		"""
+		Determines whether resampling is needed.
+
+		Parameters
+		----------
+		weights : array_like
+			The particles' weights
+
+		Returns
+		-------
+		out: bool
+			Returns True if resampling must be carried out according to the criterion.
+		"""
 		
 		pass
 
@@ -55,12 +82,18 @@ class ResamplingCriterion:
 class EffectiveSampleSizeBasedResamplingCriterion(ResamplingCriterion):
 	
 	def __init__(self, resampling_ratio):
+		"""
+		Creates an effective sample size-based resampling criterion object.
+
+		Parameters
+		----------
+		resampling_ratio : float
+			The requested effective sample size.
+		"""
 		
 		self._resampling_ratio = resampling_ratio
 		
 	def is_resampling_needed(self, weights):
-		
-		super().is_resampling_needed(weights)
 		
 		# a division by zero may occur...
 		try:
@@ -77,7 +110,5 @@ class EffectiveSampleSizeBasedResamplingCriterion(ResamplingCriterion):
 class AlwaysResamplingCriterion(ResamplingCriterion):
 	
 	def is_resampling_needed(self, weights):
-		
-		super().is_resampling_needed(weights)
 		
 		return True
