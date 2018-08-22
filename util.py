@@ -1,8 +1,20 @@
 import numpy as np
 
 
-# the logarithm of a bunch of real numbers given its individual logarithms
 def log_sum_from_individual_logs(logs):
+	"""
+	Returns the logarithm of the sum of a sequence of numbers given their individual logarithms.
+
+	Parameters
+	----------
+	logs : array_like
+		The (individual) logarithms of a sequence of numbers.
+
+	Returns
+	-------
+	out: float
+		The logarithm of the sum.
+	"""
 
 	descending_sort = np.sort(logs)[::-1]
 
@@ -10,6 +22,19 @@ def log_sum_from_individual_logs(logs):
 
 
 def normalize_from_logs(logs):
+	"""
+	Returns the sum of a sequence of numbers given their individual logarithms.
+
+	Parameters
+	----------
+	logs : array_like
+		The (individual) logarithms of a sequence of numbers.
+
+	Returns
+	-------
+	out: float
+		The (natural) sum.
+	"""
 
 	log_sum = log_sum_from_individual_logs(logs)
 
