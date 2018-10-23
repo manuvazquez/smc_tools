@@ -23,7 +23,7 @@ def log_sum_from_individual_logs(logs):
 
 def normalize_from_logs(logs):
 	"""
-	Returns the sum of a sequence of numbers given their individual logarithms.
+	Normalizes a sequence of numbers (so that they add up to 1) given their individual logarithms.
 
 	Parameters
 	----------
@@ -32,8 +32,8 @@ def normalize_from_logs(logs):
 
 	Returns
 	-------
-	out: float
-		The (natural) sum.
+	out: ndarray
+		The normalized sequence.
 	"""
 
 	log_sum = log_sum_from_individual_logs(logs)
