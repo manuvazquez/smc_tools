@@ -74,6 +74,6 @@ def weights_hist(
 
 	# print(entropy, max_entropy)
 
-	axes.set_title(f'entropy = {entropy:.2f} (max. is {max_entropy:.2f}); maximum weight = {weights.max():.2f}')
+	axes.set_title(f'entropy = {entropy:.2f} (max. is {max_entropy:.2f}); maximum weight = {weights.max():.4f}')
 
 	return fig, axes
