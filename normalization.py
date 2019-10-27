@@ -2,7 +2,7 @@ import warnings
 
 import numpy as np
 
-from . import util
+import util
 
 # exponent of number "e" that yields "eps" (see https://docs.scipy.org/doc/numpy/reference/generated/numpy.finfo.html)
 negep_for_e = np.finfo(np.float64).negep * np.log(2)

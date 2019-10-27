@@ -4,16 +4,16 @@ import numpy as np
 
 
 class ResamplingAlgorithm(metaclass=abc.ABCMeta):
+	"""
+	Abstract class for a resampling algorithm.
+	"""
 	
-	def __init__(self):
-		"""
-			Abstract class for a resampling algorithm
-		"""
-		
+	def __init__(self) -> None:
+
 		pass
 
 	@abc.abstractmethod
-	def get_indexes(self, weights, n):
+	def get_indexes(self, weights: np.ndarray, n: int) -> np.ndarray:
 		"""
 		Returns the indexes of the particles that should be kept after resampling.
 		
@@ -21,53 +21,59 @@ class ResamplingAlgorithm(metaclass=abc.ABCMeta):
 
 		Parameters
 		----------
-		weights : array_like
+		weights : ndarray
 			The weights of the particles.
 		n : int, optional
 			The number of indexes requested
 
 		Returns
 		-------
-		out : array_like
+		out : ndarray
 			The indices of the selected particles
 		"""
 		pass
 
 
 class MultinomialResamplingAlgorithm(ResamplingAlgorithm):
+	"""
+	Class for multinomial resampling.
+	"""
 	
-	def __init__(self, PRNG=np.random.RandomState()):
+	def __init__(self, prng=np.random.RandomState()) -> None:
 		"""
 		Creates a "multinomial" resampling object.
 
 		Parameters
 		----------
-		PRNG : RandomState instance or None, optional (default=None)
-			If RandomState instance, PRNG is the random number generator;
+		prng : RandomState instance or None, optional (default=None)
+			If RandomState instance, `prng` is the random number generator;
 			If None, a new random number generator instance is built
 		"""
 		
-		self._PRNG = PRNG
+		self._prng = prng
 		
-	def get_indexes(self, weights, n=None):
+	def get_indexes(self, weights: np.ndarray, n: int = None) -> np.ndarray:
 		
 		if not n:
 
 			n = weights.size
 		
-		return self._PRNG.choice(range(weights.size), n, p=weights)
+		return self._prng.choice(range(weights.size), n, p=weights)
 
 
 class ResamplingCriterion(metaclass=abc.ABCMeta):
+	"""
+	Abstract class for a resampling criterion.
+	"""
 
 	@abc.abstractmethod
-	def is_resampling_needed(self, weights):
+	def is_resampling_needed(self, weights: np.ndarray) -> bool:
 		"""
 		Determines whether resampling is needed.
 
 		Parameters
 		----------
-		weights : array_like
+		weights : ndarray
 			The particles' weights
 
 		Returns
@@ -80,8 +86,11 @@ class ResamplingCriterion(metaclass=abc.ABCMeta):
 
 
 class EffectiveSampleSizeBasedResamplingCriterion(ResamplingCriterion):
+	"""
+	Class for resampling based on sample size.
+	"""
 	
-	def __init__(self, resampling_ratio):
+	def __init__(self, resampling_ratio: float) -> None:
 		"""
 		Creates an effective sample size-based resampling criterion object.
 
@@ -93,7 +102,7 @@ class EffectiveSampleSizeBasedResamplingCriterion(ResamplingCriterion):
 		
 		self._resampling_ratio = resampling_ratio
 		
-	def is_resampling_needed(self, weights):
+	def is_resampling_needed(self, weights: np.ndarray) -> bool:
 		
 		# a division by zero may occur...
 		try:
@@ -108,7 +117,10 @@ class EffectiveSampleSizeBasedResamplingCriterion(ResamplingCriterion):
 
 
 class AlwaysResamplingCriterion(ResamplingCriterion):
+	"""
+	Class implementing an always-resampling policy.
+	"""
 	
-	def is_resampling_needed(self, weights):
+	def is_resampling_needed(self, weights: np.ndarray) -> bool:
 		
 		return True
