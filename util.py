@@ -1,9 +1,13 @@
-import numpy as np
+from typing import Sequence
+
+import scipy.special
 
 
-def log_sum_from_individual_logs(logs: np.ndarray) -> float:
+def log_sum_from_individual_logs(logs: Sequence) -> float:
 	"""
 	Returns the logarithm of the sum of a sequence of numbers given their individual logarithms.
+
+	TODO: this function is here for backwards compatibility reasons
 
 	Parameters
 	----------
@@ -16,6 +20,4 @@ def log_sum_from_individual_logs(logs: np.ndarray) -> float:
 		The logarithm of the sum.
 	"""
 
-	descending_sort = np.sort(logs)[::-1]
-
-	return descending_sort[0] + np.log1p(np.exp(descending_sort[1:] - descending_sort[0]).sum())
+	return scipy.special.logsumexp(logs)

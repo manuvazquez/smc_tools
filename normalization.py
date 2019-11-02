@@ -1,8 +1,7 @@
 import warnings
 
 import numpy as np
-
-import util
+import scipy.special
 
 # exponent of number "e" that yields "eps" (see https://docs.scipy.org/doc/numpy/reference/generated/numpy.finfo.html)
 negep_for_e = np.finfo(np.float64).negep * np.log(2)
@@ -23,9 +22,7 @@ def normalize_from_logs(logs: np.ndarray) -> np.ndarray:
 		The normalized sequence.
 	"""
 
-	log_sum = util.log_sum_from_individual_logs(logs)
-
-	return np.exp(logs - log_sum)
+	return np.exp(logs - scipy.special.logsumexp(logs))
 
 
 def normalize_or_flatten(weights: np.ndarray) -> np.ndarray:
@@ -83,7 +80,7 @@ def normalize_or_flatten_logs(log_weights: np.ndarray) -> np.ndarray:
 	"""
 
 	# the logarithm of the sum
-	log_sum = util.log_sum_from_individual_logs(log_weights)
+	log_sum = scipy.special.logsumexp(log_weights)
 
 	# if the sum of all weights is zero (normalization cannot be carried out)...
 	if log_sum <= negep_for_e:
